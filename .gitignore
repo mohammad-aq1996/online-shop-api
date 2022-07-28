@@ -1,0 +1,5 @@
+store_api/__pycache__
+store/migrations
+users/migrations
+
+db.sqlite
