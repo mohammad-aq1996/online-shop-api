@@ -1,5 +1,6 @@
 store_api/__pycache__
 store/migrations
 users/migrations
-
-db.sqlite
+store/__pycache__
+users/__pycache__
+db.sqlite3
