@@ -22,3 +22,35 @@ class ProductViewSet(ModelViewSet):
 class CustomerViewSet(ModelViewSet):
     queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomreSerializer
+
+
+class CartViewSet(ModelViewSet):
+    http_method_names = ('post','get', 'delete', )
+    queryset = models.Cart.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreateCartSerializer
+        return serializers.CartSerializer
+
+
+class CartItemViewSet(ModelViewSet):
+    http_method_names = ('post', 'get', 'delete', 'patch')
+    queryset = models.CartItem.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.AddItemSerializer
+        elif self.request.method == 'PATCH':
+            return serializers.UpdateCartItemSerializer
+        else:
+            return serializers.CartItemSerializer
+            
+    def get_serializer_context(self):
+        return {'cart_id': self.kwargs['carts_pk']}
+
+    def get_queryset(self):
+        return models.CartItem.objects.filter(cart_id=self.kwargs['carts_pk']).select_related('product')
+
+
+
