@@ -9,6 +9,8 @@ router.register('collections', views.CollectionViewSet)
 router.register('products', views.ProductViewSet)
 router.register('customers', views.CustomerViewSet, basename='customers')
 router.register('carts', views.CartViewSet, basename='carts')
+router.register('orders', views.OrderViewSet)
+router.register('orders', views.OrderViewSet, basename='orders')
 
 domains_router = routers.NestedSimpleRouter(router, 'carts', lookup='carts')
 
