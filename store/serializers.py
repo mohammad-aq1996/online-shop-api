@@ -135,3 +135,25 @@ class CreateOrderSerializer(serializers.Serializer):
             models.OrderItem.objects.bulk_create(order_items)
             models.Cart.objects.filter(pk=cart_id).delete()
             return order
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product = SimpleProductSerializer()
+
+    class Meta:
+        model = models.OrderItem
+        fields = ['id', 'product', 'unit_price', 'quantity']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True)
+
+    class Meta:
+        model = models.Order
+        fields = ['id', 'customer', 'placed_at', 'payment_status', 'items']
+
+
+class UpdateOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Order
+        fields = ['payment_status']
