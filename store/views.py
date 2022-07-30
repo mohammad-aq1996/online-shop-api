@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from store.filters import ProductFilter
 from . import models, serializers
+from .permissions import IsSuperUserOrReadOnly
 
 
 class CollectionViewSet(ModelViewSet):
@@ -16,6 +17,7 @@ class CollectionViewSet(ModelViewSet):
 class ProductViewSet(ModelViewSet):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
+    permission_classes = [IsSuperUserOrReadOnly]
     filterset_class = ProductFilter
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['title', 'description']
