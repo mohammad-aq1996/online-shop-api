@@ -20,8 +20,13 @@ class ProductViewSet(ModelViewSet):
 
 
 class CustomerViewSet(ModelViewSet):
-    queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomreSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return models.Customer.objects.all()
+        return models.Customer.objects.filter(user=self.request.user)
+    
 
 
 class CartViewSet(ModelViewSet):
