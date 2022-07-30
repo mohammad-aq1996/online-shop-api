@@ -40,9 +40,13 @@ class CustomerViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-class CartViewSet(ModelViewSet): #Is Admin or readonly
+class CartViewSet(ModelViewSet):
     http_method_names = ('post','get', 'delete', )
-    queryset = models.Cart.objects.all()
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            models.Cart.objects.all()
+        return models.Cart.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
