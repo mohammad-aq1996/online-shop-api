@@ -21,7 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
         
 
 class CustomreSerializer(serializers.ModelSerializer):
-    user_id = serializers.IntegerField()
+    user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = models.Customer
         fields = ('id', 'phone', 'birth_date', 'membership', 'user_id')
