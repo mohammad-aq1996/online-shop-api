@@ -1,6 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from store.filters import ProductFilter
 from . import models, serializers
 
@@ -26,7 +28,18 @@ class CustomerViewSet(ModelViewSet):
         if self.request.user.is_superuser:
             return models.Customer.objects.all()
         return models.Customer.objects.filter(user=self.request.user)
-    
+
+    @action(detail=False, methods=['GET', 'PUT'])
+    def me(self, request):
+        (customer, created) = models.Customer.objects.get_or_create(user=request.user)
+        if request.method == 'GET':
+            serializer = serializers.CustomreSerializer(customer)
+            return Response(serializer.data)
+        else:
+            serializer = serializers.CustomreSerializer(instance=customer, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        return Response(serializer.data)
 
 
 class CartViewSet(ModelViewSet):
