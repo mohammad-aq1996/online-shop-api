@@ -30,9 +30,12 @@ class CustomreSerializer(serializers.ModelSerializer):
 class CreateCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart
-        fields = ('id',)
-        read_only_fields = ('id',)
+        fields = ('id', 'user')
+        read_only_fields = ('id','user', )
 
+    def save(self):
+        self.instance = models.Cart.objects.create(user=self.context['user'], **self.validated_data)
+        return self.instance
 
 class SimpleProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,7 +52,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ('id','product', 'quantity', 'total_price')
+        fields = ('id', 'product', 'quantity', 'total_price')
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -61,7 +64,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Cart
-        fields = ('id', 'items', 'total_price')
+        fields = ('id', 'user', 'items', 'total_price')
 
 
 class UpdateCartItemSerializer(serializers.ModelSerializer):    
