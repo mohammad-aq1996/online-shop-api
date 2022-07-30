@@ -25,7 +25,7 @@ class ProductViewSet(ModelViewSet):
 
 
 class CustomerViewSet(ModelViewSet):
-    queryser = models.Customer.objects.all()
+    queryset = models.Customer.objects.all()
     serializer_class = serializers.CustomreSerializer
     permission_classes = [IsAdminUser]
 
