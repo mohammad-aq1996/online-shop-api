@@ -44,6 +44,7 @@ class CustomerViewSet(ModelViewSet):
 
 class CartViewSet(ModelViewSet):
     http_method_names = ('post','get', 'delete', )
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         if self.request.user.is_superuser:
@@ -62,6 +63,7 @@ class CartViewSet(ModelViewSet):
 class CartItemViewSet(ModelViewSet):
     http_method_names = ('post', 'get', 'delete', 'patch')
     queryset = models.CartItem.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
