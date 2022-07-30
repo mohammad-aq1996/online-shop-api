@@ -30,3 +30,17 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ['membership']
     list_per_page = 10
     list_select_related = ['user']
+
+
+class OrderItemInline(admin.TabularInline):
+    autocomplete_fields = ['product']
+    min_num = 1
+    max_num = 10
+    model = models.OrderItem
+    extra = 0
+
+
+class OrderAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['customer']
+    inlines = [OrderItemInline]
+    list_display = ['id', 'placed_at', 'customer']
