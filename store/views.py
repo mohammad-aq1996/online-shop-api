@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from store.filters import ProductFilter
 from . import models, serializers
 
@@ -22,14 +23,11 @@ class ProductViewSet(ModelViewSet):
 
 
 class CustomerViewSet(ModelViewSet):
+    queryser = models.Customer.objects.all()
     serializer_class = serializers.CustomreSerializer
+    permission_classes = [IsAdminUser]
 
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            return models.Customer.objects.all()
-        return models.Customer.objects.filter(user=self.request.user)
-
-    @action(detail=False, methods=['GET', 'PUT'])
+    @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
         (customer, created) = models.Customer.objects.get_or_create(user=request.user)
         if request.method == 'GET':
